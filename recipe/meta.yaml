@@ -1,0 +1,54 @@
+{% set name = "claude-agent-sdk" %}
+{% set version = "0.1.45" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/claude_agent_sdk-{{ version }}.tar.gz
+  sha256: 97c1e981431b5af1e08c34731906ab8d4a58fe0774a04df0ea9587dcabc85151
+
+build:
+  number: 0
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vvv
+
+requirements:
+  host:
+    - hatchling
+    - pip
+    - python
+  run:
+    - anyio >=4.0.0
+    - mcp >=0.1.0
+    - python
+    - typing_extensions >=4.0.0
+
+test:
+  source_files:
+    - tests
+  requires:
+    - pip
+    - pytest
+    - pytest-asyncio >=0.20.0
+    - trio
+  commands:
+    - pip check
+    # Skip changelog validation tests.
+    - pytest tests -v --ignore="tests/test_changelog.py"
+  imports:
+    - claude_agent_sdk
+
+about:
+  home: https://github.com/anthropics/claude-agent-sdk-python
+  license_file: LICENSE
+  license: BSD-3-Clause
+  license_family: BSD
+  summary: Python SDK for Claude Agent.
+  description: Python SDK for Claude Agent.
+  dev_url: https://github.com/anthropics/claude-agent-sdk-python
+  doc_url: https://platform.claude.com/docs/en/agent-sdk/python
+
+extra:
+  recipe-maintainers:
+    - viridianmelody
